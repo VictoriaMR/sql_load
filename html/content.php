@@ -4,11 +4,11 @@
 	<div class="header">
 		<ul class="header-type-list">
 			<?php foreach ($siteList as $key => $value) { ?>
-				<li class="site-type <?php if($value == $type){ echo 'selected'; } ?>" >
-					<a href="./index.php?type=<?php echo $value;?>"><?php echo $value;?></a></li>
+				<li class="<?php if($value == $type){ echo 'selected'; } ?>" >
+					<a href="./index.php?type=<?php echo $value;?>" title="refresh"><?php echo $value;?></a></li>
 			<?php } ?>
 				<li class="del-li">
-					<a href="./index.php?type=<?php echo $type;?>&action=del">删除</a>
+					<a href="./index.php?type=<?php echo $type;?>&action=del" title="delete">删除</a>
 				</li>
 		</ul>
 	</div>
