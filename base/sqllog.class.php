@@ -104,7 +104,7 @@ class SqlLog
 				foreach ($vv as $k => $v) {
 					$v = trim($v);
 					if (!empty($v)) {
-						$list[] = $this->specialHtml($v, $kk=='title' ? 'class="connect"' : 'class="query" title="点击复制"');
+						$list[] = $this->specialHtml($v, $kk=='title' ? 'class="connect"' : 'class="query" title="copy"');
 					}
 				}
 			}

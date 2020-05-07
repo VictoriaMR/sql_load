@@ -18,6 +18,4 @@ $data = $sqlLog->index();
 
 include(APP_PATH.'html/content.php');
 
-// print_r($data);die();
-
 
