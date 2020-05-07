@@ -24,6 +24,9 @@ html {overflow-y: scroll;}
 
 .header ul>li {float: left; text-align: center; padding: 10px 20px;cursor: pointer; border: 1px solid #ccc; border-bottom: none;}
 
+.del-li {margin-left: 10px;background-color: #bb5d5d;}
+.del-li a {color: #fff;}
+
 .content {font-size: 16px;}
 
 .connect {background: #ebf8a4; border: 1px solid; border-color: #a2d246; padding: 10px 10px 10px 10px;margin: 3px 0;}

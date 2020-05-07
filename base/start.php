@@ -10,7 +10,7 @@ $type = $_GET['type'] ?? key($config);
 //站点列表
 $siteList = array_filter(array_keys($config));
 
-$filename = $config[$type];
+$filename = $config[$type] ?? '';
 
 $sqlLog = new SqlLog($filename, $action);
 

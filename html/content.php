@@ -7,6 +7,9 @@
 				<li class="site-type <?php if($value == $type){ echo 'selected'; } ?>" >
 					<a href="./index.php?type=<?php echo $value;?>"><?php echo $value;?></a></li>
 			<?php } ?>
+				<li class="del-li">
+					<a href="./index.php?type=<?php echo $type;?>&action=del">删除</a>
+				</li>
 		</ul>
 	</div>
 	<div class="clear"></div>
