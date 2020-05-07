@@ -25,6 +25,19 @@ $('.query-content').on('click', function(e){
 	//实例化复制对象
 })
 
+var titleTop = $('.content').offset().top;
+
+//监听页面滚动
+$(window).scroll(function(event){
+	var scrollTop = $(window).scrollTop();
+	if (scrollTop > titleTop) {
+		$('.header').addClass('fixed');
+		$('.content').css({'margin-top': titleTop});
+	} else {
+		$('.header').removeClass('fixed');
+		$('.content').css({'margin-top': 0});
+	}
+});
 
 </script>
 <?php include(APP_PATH.'html/footer.php'); ?>

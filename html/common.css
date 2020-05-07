@@ -31,6 +31,8 @@ html {overflow-y: scroll;}
 
 .connect {background: #ebf8a4; border: 1px solid; border-color: #a2d246; padding: 10px 10px 10px 10px;margin: 3px 0;}
 
-.query {padding: 2px; color: #05a; cursor: pointer;}
+.query {padding: 2px; color: #05a; cursor: pointer; line-height: 25px;}
 
 .special {color: #f1006e;}
+
+.fixed { left: 0; position: fixed; top: 0; width: 100%; z-index: 100; background-color: #fff;padding: 0 10px; padding-top: 10px;}

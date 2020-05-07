@@ -127,7 +127,14 @@ class SqlLog
 		$content = preg_replace('/([0-9]{1,} Query)/', '', $content);
 
 		// 关键字匹配突出
-		$content = str_replace($this->replaceArr, array_map(function($value){return '<span class="special">'.$value.'</span>';}, $this->replaceArr), $content);
+		$content = str_replace($this->replaceArr, array_map(function($value){
+			if (false !== strpos($value, '(')) {
+				$str = '<span class="special">'.trim($value, '(').'</span>(';
+			} else {
+				$str = '<span class="special">'.$value.'</span>';
+			}
+			return $str;
+		}, $this->replaceArr), $content);
 
 		return "<div {$css}>{$content}</div>";
 	}	
