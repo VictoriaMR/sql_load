@@ -7,11 +7,15 @@ class SqlLog
 {
 	protected $filename = null;
 	protected $action = null;
+	protected $replaceArr = [];
 	
 	function __construct($filename, $action)
 	{
 		$this->filename = $filename;
 		$this->action = $action;
+
+		$this->replaceArr = require APP_PATH . 'base/replace.php';
+
 	}
 
 	public function index()
@@ -45,8 +49,6 @@ class SqlLog
 
 				$htmlArr = [];
 				$tempArr = [];
-
-				$replaceArr = require APP_PATH . 'base/replace.php';
 
 				$isTitle = false;
 
@@ -100,8 +102,9 @@ class SqlLog
 		foreach ($strArr as $key => $value) {
 			foreach ($value as $kk => $vv) {
 				foreach ($vv as $k => $v) {
+					$v = trim($v);
 					if (!empty($v)) {
-						$list[] = $this->specialHtml($v, '');
+						$list[] = $this->specialHtml($v, $kk=='title' ? 'class="connect"' : 'class="query" title="点击复制"');
 					}
 				}
 			}
@@ -113,6 +116,19 @@ class SqlLog
 	protected function specialHtml($content, $css = '')
 	{
 		$content = trim($content);
+
+		//匹配查询主体
+		if (false !== strrpos($content, 'Query')) {
+			$tmpstr = substr($content, strrpos($content, 'Query') + 6);
+
+			$content = substr($content, 0, strrpos($content, 'Query')) . '<span class="query-content">'.$tmpstr.'</span>';
+		}
+		//替换通用查询字符
+		$content = preg_replace('/([0-9]{1,} Query)/', '', $content);
+
+		// 关键字匹配突出
+		$content = str_replace($this->replaceArr, array_map(function($value){return '<span class="special">'.$value.'</span>';}, $this->replaceArr), $content);
+
 		return "<div {$css}>{$content}</div>";
 	}	
 }
