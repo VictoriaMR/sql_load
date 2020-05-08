@@ -21,8 +21,15 @@
 	</div>
 </div>
 <script type="text/javascript">
-$('.query-content').on('click', function(e){
-	//实例化复制对象
+//点击复制
+$('.query-content').bind('click', function(){
+	var text = document.getElementById($(this).attr('attr'));
+	var selection = window.getSelection();
+	var range = document.createRange();
+	range.selectNodeContents(text);
+	selection.removeAllRanges();
+	selection.addRange(range);
+	document.execCommand("Copy");
 })
 
 var titleTop = $('.content').offset().top;

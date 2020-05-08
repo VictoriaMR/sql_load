@@ -2,7 +2,7 @@
 
 /* 入口文件 */
 
-define('APP_VERSION', '1.0');
+define('APP_VERSION', '2.0');
 
 // 定义应用目录
 define('APP_PATH', str_replace('\\', '/', __DIR__) . '/');

@@ -99,12 +99,13 @@ class SqlLog
 			return [$this->specialHtml($strArr, '')];
 
 		$list = [];
+		$count = 0;
 		foreach ($strArr as $key => $value) {
 			foreach ($value as $kk => $vv) {
 				foreach ($vv as $k => $v) {
 					$v = trim($v);
 					if (!empty($v)) {
-						$list[] = $this->specialHtml($v, $kk=='title' ? 'class="connect"' : 'class="query" title="copy"');
+						$list[] = $this->specialHtml($v, $kk=='title' ? 'class="connect"' : 'class="query"', $count++);
 					}
 				}
 			}
@@ -113,15 +114,14 @@ class SqlLog
 		return $list;
 	}
 
-	protected function specialHtml($content, $css = '')
+	protected function specialHtml($content, $css = '', $sort = 0)
 	{
 		$content = trim($content);
-
 		//匹配查询主体
 		if (false !== strrpos($content, 'Query')) {
 			$tmpstr = substr($content, strrpos($content, 'Query') + 6);
 
-			$content = substr($content, 0, strrpos($content, 'Query')) . '<span class="query-content">'.$tmpstr.'</span>';
+			$content = substr($content, 0, strrpos($content, 'Query')) . '<span class="query-content" attr="copy-'.$sort.'" id="copy-'.$sort.'">'.$tmpstr.'</span>';
 		}
 		//替换通用查询字符
 		$content = preg_replace('/([0-9]{1,} Query)/', '', $content);
@@ -136,6 +136,6 @@ class SqlLog
 			return $str;
 		}, $this->replaceArr), $content);
 
-		return "<div {$css}>{$content}</div>";
+		return "<div {$css} title='COPY'>{$content}</div>";
 	}	
 }
