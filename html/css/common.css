@@ -36,3 +36,26 @@ html {overflow-y: scroll;}
 .special {color: #f1006e;}
 
 .fixed { left: 0; position: fixed; top: 0; width: 100%; z-index: 100; background-color: #fff;padding: 0 10px; padding-top: 10px;}
+
+.hidden { display: none; }
+
+.center {text-align: center;}
+
+img {width: 36px; height: 36px; }
+
+.orange { color: orange; }
+
+.rotate {
+	-webkit-animation: rotate 1s linear infinite;
+    animation: rotate 1s linear infinite;
+}
+@keyframes rotate{
+    from{
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to{
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

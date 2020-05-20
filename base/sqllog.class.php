@@ -8,6 +8,8 @@ class SqlLog
 	protected $filename = null;
 	protected $action = null;
 	protected $replaceArr = [];
+	protected $page = 1;
+	protected $pagesize = 200;
 	
 	function __construct($filename, $action)
 	{
@@ -18,9 +20,11 @@ class SqlLog
 
 	}
 
-	public function index()
+	public function index($page=1, $pagesize = 200)
 	{
 		$error = '';
+		$this->page = $page;
+		$this->pagesize = $pagesize;
 
 		//目录存在
 		if (!empty($this->filename) && is_file($this->filename)) {
@@ -45,39 +49,49 @@ class SqlLog
 
 			//错误码非空
 			if (empty($error)) {
+
 				$fp = @fopen($this->filename, 'r');
+
+				$offset = ($page - 1) * $pagesize;
 
 				$htmlArr = [];
 				$tempArr = [];
 
 				$isTitle = false;
 
+				$start = 0;
+
 				//逐行读取文件
 				while(!feof($fp))
 				{	
-					$str = fgets($fp);
-					
-					//是链接数据库的语句 特殊处理
-					if(preg_match('/Connect/', $str)){
-						if (!empty($tempArr)) {
-							$htmlArr[] = $tempArr;
-							$tempArr = [];
-						}
+					if ($start >= $offset && $start <= ($offset + $pagesize)) {
+						$str = fgets($fp);
+						//是链接数据库的语句 特殊处理
+						if(preg_match('/Connect/', $str)){
+							if (!empty($tempArr)) {
+								$htmlArr[] = $tempArr;
+								$tempArr = [];
+							}
 
-						$isTitle = true;
+							$isTitle = true;
+						} else {
+							$isTitle = false;
+						}
+						$str = trim($str);
+						if (!empty($str))
+							$tempArr[$isTitle ? 'title' : 'list'][] = $str;
 					} else {
-						$isTitle = false;
+						fgets($fp);
 					}
-					$str = trim($str);
-					if (!empty($str))
-						$tempArr[$isTitle ? 'title' : 'list'][] = $str;
+					
+					$start ++ ;
 				}
 
 				if (!empty($tempArr)) {
 					$htmlArr[] = $tempArr;
 					$tempArr = [];
 				}
-
+				
 				@fclose($fp);  //关闭指针
 			}
 		} else {
@@ -87,19 +101,43 @@ class SqlLog
 		return $this->getLogList(!empty($htmlArr) ? $htmlArr : $error);
 	}
 
+	public function getTotal()
+	{
+		$total = 0;
+		if (!empty($this->filename) && is_file($this->filename)) {
+			$fp = @fopen($this->filename, 'r');
+
+			while(!feof($fp))
+			{
+				fgets($fp);
+				$total ++ ;
+			}
+
+			if ($total > 0) {
+				$total ++;
+			}
+
+			fseek($fp, 0);
+
+			@fclose($fp);  //关闭指针
+		}
+
+		return $total;
+	}
+
 	/*
 	 * 特殊处理字符
 	 */
 	protected function getLogList($strArr = [])
 	{
 		if (empty($strArr))
-			return [$this->specialHtml('内容为空', '')];
+			return [];
 
 		if (!is_array($strArr))
 			return [$this->specialHtml($strArr, '')];
 
 		$list = [];
-		$count = 0;
+		$count = ($this->page - 1) * $this->pagesize;
 		foreach ($strArr as $key => $value) {
 			foreach ($value as $kk => $vv) {
 				foreach ($vv as $k => $v) {
@@ -118,8 +156,12 @@ class SqlLog
 	{
 		$content = trim($content);
 		//匹配查询主体
-		if (false !== strrpos($content, 'Query')) {
-			$tmpstr = substr($content, strrpos($content, 'Query') + 6);
+		if (false !== strrpos($content, 'Query') || false !== strrpos($content, 'SELECT') || false !== strrpos($content, 'UPDATE') || false !== strrpos($content, 'INSERT') || false !== strrpos($content, 'DELETE')) {
+
+			if (false !== strrpos($content, 'Query'))
+				$tmpstr = substr($content, strrpos($content, 'Query') + 6);
+			else
+				$tmpstr = $content;
 
 			$content = substr($content, 0, strrpos($content, 'Query')) . '<span class="query-content" attr="copy-'.$sort.'" id="copy-'.$sort.'">'.$tmpstr.'</span>';
 		}
