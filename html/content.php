@@ -8,7 +8,7 @@
 					<a href="./index.php?type=<?php echo $value;?>" title="refresh"><?php echo $value;?></a></li>
 			<?php } ?>
 				<li class="del-li">
-					<a href="./index.php?type=<?php echo $type;?>&action=del" title="delete">删除</a>
+					<a href="./index.php?type=<?php echo $type;?>&action=del" title="delete">Delete</a>
 				</li>
 		</ul>
 	</div>
